@@ -1,0 +1,30 @@
+# Secretos y configuracion local
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+herramientas/.local/
+
+# Bases de datos, respaldos y correos de prueba (contienen datos personales)
+*.db
+*.db-journal
+*.antes
+pqrs-*.zip
+pqrs-*.zip.enc
+pqrs-*.sha256
+respaldos/
+*.eml
+
+# Generados
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+staging/
+intermitentes.log
+*.log
+*.zip
+
+# Documentos internos (analisis de riesgos, revision, estado de produccion): NO se publican; se comparten por un canal privado
+docs-internos/

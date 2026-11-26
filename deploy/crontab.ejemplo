@@ -1,0 +1,14 @@
+# Tareas de operacion del Agente PQRS en Linux (cron). Edite las rutas y cargue con:  crontab -e
+#
+# Importante: cron NO hereda las variables de entorno de la app. Defina aqui, o en un archivo que se cargue antes del comando,
+# DATABASE_URL, PQRS_RESPALDO_DIR y las PQRS_SMTP_* (la contrasena SMTP preferiblemente con PQRS_SMTP_PASSWORD_FILE).
+# Use una cuenta de servicio dedicada y un archivo de entorno con permisos 600 (chmod 600 /etc/pqrs/entorno).
+#
+# Minuto Hora DiaMes Mes DiaSemana  Comando
+0  3  *  *  *   . /etc/pqrs/entorno && cd /opt/pqrs && python herramientas/respaldo.py crear --destino /var/respaldos/pqrs --clave-archivo /etc/pqrs/respaldo.key --copiar-a /mnt/externo/pqrs --conservar 14
+*/15 * * * *   . /etc/pqrs/entorno && cd /opt/pqrs && python herramientas/monitoreo.py --correo-a admin@tuempresa.com
+0  4  *  *  0   . /etc/pqrs/entorno && cd /opt/pqrs && python herramientas/retencion.py antiguas --dias 730 --aplicar
+
+# Permisos de los archivos sensibles (una sola vez):
+#   chmod 600 /opt/pqrs/pqrs.db /etc/pqrs/respaldo.key /etc/pqrs/entorno
+#   chown pqrs-servicio: /opt/pqrs/pqrs.db /etc/pqrs/respaldo.key /etc/pqrs/entorno
